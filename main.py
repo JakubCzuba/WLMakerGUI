@@ -136,7 +136,7 @@ labelmenu.pack(
 filelist = customtkinter.CTkScrollableFrame(
     framemenu,
     width=600,
-    height=300,
+    height=400,
     scrollbar_button_color="#025b37",
     fg_color="#101116",
     border_color="#6766b3",
