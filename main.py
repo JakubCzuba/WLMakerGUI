@@ -112,8 +112,8 @@ backarrow = customtkinter.CTkButton(
 )
 
 backarrow.place(
-    x=250,
-    y=120,
+    relx=0.1,
+    rely=0.15,
     anchor="center"
 )
 
@@ -181,7 +181,7 @@ def filesrefresh():
 
     if not excelfiles:
         showcomment(
-            "Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy."
+            "Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku excwela do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy."
         )
         return
 
