@@ -165,7 +165,7 @@ def filesrefresh():
 
     if not pathfiles.is_dir():
         showcomment(
-            "Sorry bratku ale pojebałeś ścieżki,\n nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać, sorcia."
+            "ERROR #6767\n Sorry bratku ale pojebałeś ścieżki,\n nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać, sorcia."
         )
         return
 
@@ -181,7 +181,7 @@ def filesrefresh():
 
     if not excelfiles:
         showcomment(
-            "Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku excwela do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy."
+            "ERROR #6767\n Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku excwela do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy."
         )
         return
 
