@@ -159,23 +159,16 @@ desktop = Path(winreg.ExpandEnvironmentStrings(desktoppath))
 
 pathfiles = desktop / "WLMaker"
 
-if not pathfiles.is_dir():
-    errorfolder = customtkinter.CTkLabel(
-        filelist,
-        text="Sorry bratku ale pojebałeś ścieżki,\n nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać, sorcia.",
-        wraplength=600,
-        corner_radius=50,
-        justify="center",
-        font=("Arial", 20),
-        text_color="#02ffa4",
-        fg_color="transparent"
-    )
-    errorfolder.pack(
-        padx=10, 
-        pady=150
-        )
+def filesrefresh():
+    for widget in filelist.winfo_children():
+        widget.destroy()
 
-else:
+    if not pathfiles.is_dir():
+        showcomment(
+            "Sorry bratku ale pojebałeś ścieżki,\n nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać, sorcia."
+        )
+        return
+
     excelfiles = []
 
     for itemfile in pathfiles.iterdir():
@@ -187,80 +180,63 @@ else:
             excelfiles.append(itemfile)
 
     if not excelfiles:
-        emptyfolder = customtkinter.CTkLabel(
-            filelist,
-            text="Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy. ",
-            wraplength=600,
-            corner_radius=50,
-            justify="center",
-            font=("Arial", 20),
-            text_color="#02ffa4",
-            fg_color="transparent",
-            padx=25,
-            pady=25
+        showcomment(
+            "Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy."
         )
-        emptyfolder.pack(
-            padx=10, 
-            pady=150
-            )
+        return
 
-    else:
-        for itemfile in excelfiles:
-            filename = customtkinter.CTkButton(
-                filelist,
-                text=itemfile.name,
-                font=("Arial", 20),
-                corner_radius=50,
-                text_color="#02ffa4",
-                fg_color="#060608",
-                border_color="#00b0ff",
-                border_width=2
-            )
-            filename.pack(
-                anchor="w",
-                padx=10,
-                pady=10
-            )
+    for itemfile in excelfiles:
+        filename = customtkinter.CTkButton(
+            filelist,
+            text=itemfile.name,
+            font=("Arial", 20),
+            corner_radius=50,
+            text_color="#02ffa4",
+            fg_color="#060608",
+            border_color="#00b0ff",
+            border_width=2
+        )
+        filename.pack(anchor="w", padx=10, pady=10)
+
+
+def showcomment(tekst):
+    errorcomment = customtkinter.CTkFrame(
+        filelist,
+        fg_color="#060608",
+        corner_radius=25
+    )
+    errorcomment.pack(padx=10, pady=150)
+
+    showerroe = customtkinter.CTkLabel(
+        errorcomment,
+        text=tekst,
+        font=("Arial", 20),
+        text_color="#02ffa4",
+        fg_color="transparent",
+        corner_radius=0,
+        justify="center",
+        wraplength=600
+    )
+    showerroe.pack(padx=35, pady=20)
+
+
+buttonrefresh = customtkinter.CTkButton(
+    framemenu,
+    text="Odśwież",
+    font=("Arial", 20),
+    fg_color="#101116",
+    text_color="#fffc58",
+    border_color="#ff004b",
+    border_width=2,
+    corner_radius=20,
+    command=filesrefresh
+)
+buttonrefresh.place(
+    relx=0.5,
+    rely=0.85,
+    anchor="center"
+)
+
+filesrefresh()
 
 app.mainloop()
-
-# if pathfiles.is_dir():
-#     for itemfile in pathfiles.iterdir():
-#         if (
-#     itemfile.is_file()
-#     and itemfile.suffix.lower() in (".xlsx", ".xls", ".xlsm")
-#     and not itemfile.name.startswith("~$")
-# ):
-#             filename = customtkinter.CTkButton(
-#                     filelist,
-#                     text=itemfile.name,
-#                     font=("Arial", 20), 
-#                     corner_radius=50,
-#                     text_color="#02ffa4",
-#                     fg_color="#060608",
-#                     border_color="#00b0ff",
-#                     border_width=2,
-#             )
-#             filename.pack(
-#                 anchor="w", 
-#                 padx=10, 
-#                 pady=10
-#             )
-# else:
-#     errorfolder = customtkinter.CTkLabel(
-#         filelist,
-#         text="Sorry bratku ale pojebałeś ścieżki, nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać.",
-#         justify="center",
-#         font=("Arial", 20),
-#         corner_radius=50,
-#         text_color="#02ffa4",
-#         fg_color="#060608",
-#     )
-#     errorfolder.pack(
-#         anchor="center",
-#         padx=10,
-#         pady=180
-#     )
-
-
-
