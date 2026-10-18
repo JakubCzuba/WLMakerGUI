@@ -1,6 +1,7 @@
 import customtkinter
 from pathlib import Path
 from PIL import Image
+import winreg
 
 app = customtkinter.CTk()
 app.title("WL-Maker GUI")
@@ -148,44 +149,118 @@ filelist.place(
     rely=0.5
 )
 
-pathfiles = Path.home()/"OneDrive - Akademia WSB"/"Pulpit"/"WLMaker"
+with winreg.OpenKey(
+    winreg.HKEY_CURRENT_USER,
+    r"Software\Microsoft\Windows\CurrentVersion\Explorer\User Shell Folders"
+) as klucz:
+    desktoppath, _ = winreg.QueryValueEx(klucz, "Desktop")
 
-excelfiles=[]
+desktop = Path(winreg.ExpandEnvironmentStrings(desktoppath))
 
-if pathfiles.is_dir():
-    for itemfile in pathfiles.iterdir():
-        if itemfile.is_file():
-            filename = customtkinter.CTkButton(
-                    filelist,
-                    text=itemfile.name,
-                    font=("Arial", 20), 
-                    corner_radius=50,
-                    text_color="#02ffa4",
-                    fg_color="#060608",
-                    border_color="#00b0ff",
-                    border_width=2,
-            )
-            filename.pack(
-                anchor="w", 
-                padx=10, 
-                pady=10
-            )
-else:
+pathfiles = desktop / "WLMaker"
+
+if not pathfiles.is_dir():
     errorfolder = customtkinter.CTkLabel(
         filelist,
-        text="Sorry bratku ale pojebałeś ścieżki",
+        text="Sorry bratku ale pojebałeś ścieżki,\n nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać, sorcia.",
+        wraplength=600,
+        corner_radius=50,
         justify="center",
         font=("Arial", 20),
-        corner_radius=50,
         text_color="#02ffa4",
-        fg_color="#060608",
+        fg_color="transparent"
     )
     errorfolder.pack(
-        anchor="center",
-        padx=10,
-        pady=10
-    )
+        padx=10, 
+        pady=150
+        )
 
+else:
+    excelfiles = []
 
+    for itemfile in pathfiles.iterdir():
+        if (
+            itemfile.is_file()
+            and itemfile.suffix.lower() in (".xlsx", ".xls", ".xlsm")
+            and not itemfile.name.startswith("~$")
+        ):
+            excelfiles.append(itemfile)
+
+    if not excelfiles:
+        emptyfolder = customtkinter.CTkLabel(
+            filelist,
+            text="Mordzia ale z czego ja mam tu generowac zestawienia?\n Nie dodałeś żadnego pliku do folderu WLMaker,\n zrób to szybciutko bo inaczej nie popracujemy. ",
+            wraplength=600,
+            corner_radius=50,
+            justify="center",
+            font=("Arial", 20),
+            text_color="#02ffa4",
+            fg_color="transparent",
+            padx=25,
+            pady=25
+        )
+        emptyfolder.pack(
+            padx=10, 
+            pady=150
+            )
+
+    else:
+        for itemfile in excelfiles:
+            filename = customtkinter.CTkButton(
+                filelist,
+                text=itemfile.name,
+                font=("Arial", 20),
+                corner_radius=50,
+                text_color="#02ffa4",
+                fg_color="#060608",
+                border_color="#00b0ff",
+                border_width=2
+            )
+            filename.pack(
+                anchor="w",
+                padx=10,
+                pady=10
+            )
 
 app.mainloop()
+
+# if pathfiles.is_dir():
+#     for itemfile in pathfiles.iterdir():
+#         if (
+#     itemfile.is_file()
+#     and itemfile.suffix.lower() in (".xlsx", ".xls", ".xlsm")
+#     and not itemfile.name.startswith("~$")
+# ):
+#             filename = customtkinter.CTkButton(
+#                     filelist,
+#                     text=itemfile.name,
+#                     font=("Arial", 20), 
+#                     corner_radius=50,
+#                     text_color="#02ffa4",
+#                     fg_color="#060608",
+#                     border_color="#00b0ff",
+#                     border_width=2,
+#             )
+#             filename.pack(
+#                 anchor="w", 
+#                 padx=10, 
+#                 pady=10
+#             )
+# else:
+#     errorfolder = customtkinter.CTkLabel(
+#         filelist,
+#         text="Sorry bratku ale pojebałeś ścieżki, nie ma folderu WLMaker na pulpicie.\n Weź go sobie utwórz bo inaczej nie będzie działać.",
+#         justify="center",
+#         font=("Arial", 20),
+#         corner_radius=50,
+#         text_color="#02ffa4",
+#         fg_color="#060608",
+#     )
+#     errorfolder.pack(
+#         anchor="center",
+#         padx=10,
+#         pady=180
+#     )
+
+
+
